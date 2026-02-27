@@ -145,6 +145,30 @@ public class PersonsGUI extends GridPane {
                     update();
                 });
 
+        // Jeg har lavet en ny branch der hedder "time" lokalt
+        // Jeg har skrevet opgave 3) ny funktionalitet herunder
+        Button timePassButton = new Button("Time pass");
+        timePassButton.setOnAction(
+                e -> {
+                    for (int i = persons.size() - 1; i >= 0; i--){
+                        Person p = persons.get(i);
+                        p.setAge(p.getAge() +1);
+
+                        if (p.getAge() > 30 && p.getAge() < 99){
+                            Person newPerson = new Person(p.name, p.getWeight()*1.08); // blev nødt til at lave en ny "person" for at kunne opdatere...
+                            newPerson.setAge(p.getAge()); // vi beholder alderen
+                            persons.set(i, newPerson); // erstattes i listen
+                        }
+
+                        if (p.getAge() >= 99){
+                            persons.remove(i);
+                        }
+
+                    }
+                    update();
+                }
+        );
+
         Button indexButton = new Button("Add to index");
         indexButton.setOnAction(
             e -> {
