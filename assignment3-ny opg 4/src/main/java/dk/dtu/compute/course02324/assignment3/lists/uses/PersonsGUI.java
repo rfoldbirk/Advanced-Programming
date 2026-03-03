@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 /**
  * A GUI element that is allows the user to interact and
@@ -150,21 +151,21 @@ public class PersonsGUI extends GridPane {
         Button timePassButton = new Button("Time pass");
         timePassButton.setOnAction(
                 e -> {
-                    for (int i = persons.size() - 1; i >= 0; i--){
-                        Person p = persons.get(i);
-                        p.setAge(p.getAge() +1);
+                    // 3b: Alle bliver 1 år ældre
+                    persons.forEach(p -> p.setAge(p.getAge() + 1));
 
-                        if (p.getAge() > 30 && p.getAge() < 99){
-                            Person newPerson = new Person(p.name, p.getWeight()*1.08); // blev nødt til at lave en ny "person" for at kunne opdatere...
-                            newPerson.setAge(p.getAge()); // vi beholder alderen
-                            persons.set(i, newPerson); // erstattes i listen
+                    // 3c) 8% lagt oven på personer over 30 år
+                    persons.replaceAll(p ->{
+                        if (p.getAge() > 30){
+                            Person updated = new Person(p.name, p.weight * 1.08);
+                            updated.setAge(p.getAge());
+                            return updated;
                         }
-
-                        if (p.getAge() >= 99){
-                            persons.remove(i);
-                        }
-
-                    }
+                        return  p;
+                    });
+                    
+                    // 3d) Personer på 99+ år skal fjernes
+                    persons.removeIf(p -> p.getAge() >= 99);
                     update();
                 }
         );
