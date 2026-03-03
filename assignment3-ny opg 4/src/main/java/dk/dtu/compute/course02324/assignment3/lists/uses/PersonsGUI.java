@@ -103,8 +103,8 @@ public class PersonsGUI extends GridPane {
                     // makes sure that the GUI is updated accordingly
                     try {
                         int indexGetText = Integer.parseInt(indexField.getText());
-                        Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
-                        person.setAge(Integer.parseInt(ageField.getText()));
+                        Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()), Integer.parseInt(ageField.getText()));
+                        // person.setAge(Integer.parseInt(ageField.getText()));
                         persons.add(person);
 
                     } catch (NullPointerException error) {
@@ -132,6 +132,7 @@ public class PersonsGUI extends GridPane {
                 e -> {
                         persons.sort(Comparator.naturalOrder());
 
+
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -141,6 +142,8 @@ public class PersonsGUI extends GridPane {
         clearButton.setOnAction(
                 e -> {
                         persons.clear();
+                        textAreaExceptions.clear();
+
 
                     // makes sure that the GUI is updated accordingly
                     update();
@@ -157,13 +160,13 @@ public class PersonsGUI extends GridPane {
                     // 3c) 8% lagt oven på personer over 30 år
                     persons.replaceAll(p ->{
                         if (p.getAge() > 30){
-                            Person updated = new Person(p.name, p.weight * 1.08);
+                            Person updated = new Person(p.name, p.weight * 1.08, p.getAge());
                             updated.setAge(p.getAge());
                             return updated;
                         }
                         return  p;
                     });
-                    
+
                     // 3d) Personer på 99+ år skal fjernes
                     persons.removeIf(p -> p.getAge() >= 99);
                     update();
@@ -175,7 +178,7 @@ public class PersonsGUI extends GridPane {
             e -> {
                 try {
                     int indexValue = Integer.parseInt(indexField.getText());
-                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()));
+                    Person person = new Person(field.getText(), Double.parseDouble(weightField.getText()), Integer.parseInt(ageField.getText()));
                     person.setAge(Integer.parseInt(ageField.getText()));
                     persons.add(indexValue,person);
                 } catch (NumberFormatException err){
@@ -191,11 +194,12 @@ public class PersonsGUI extends GridPane {
                         textAreaExceptions.appendText(erro.getMessage());
                     }
                 }
+                update();
         });
 
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, ageField, weightField, indexField, addButton, sortButton, clearButton, averageWeight, freqName, minAge, maxAge, textAreaExceptions);
+        VBox actionBox = new VBox(field, ageField, weightField, indexField, indexButton, addButton, sortButton, clearButton, averageWeight, freqName, minAge, maxAge, textAreaExceptions);
         actionBox.setSpacing(5.0);
         this.add(actionBox, 0, 0);
 

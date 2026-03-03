@@ -20,46 +20,46 @@ public class TestLists {
     public static Comparator<Person> comparator = new GenericComparator<>();
 
     public static void main(String[] args) {
-        List<Person> persons = new ArrayList<>();
-
-        persons.add(new Person("Egon", 50 ));
-        persons.add(new Person("Ekkart", 74));
-        persons.add(new Person("Anton", 84));
-        persons.add(new Person("Carlos", 70));
-        persons.add(new Person("Ekkart", 70));
-
-        print(persons);
-        System.out.println("--------------------");
-        persons.sort(comparator);
-        // BubbleSort.sort(comparator,persons);
-
-        print(persons);
-        System.out.println("--------------------");
-
-        persons.add(2, new Person("Xavi", 85));
-
-        print(persons);
-        System.out.println("--------------------");
-        // persons.sort(comparator);
-        BubbleSort.sort(comparator, persons);
-
-        print(persons);
-        System.out.println("--------------------");
-
-        persons = new SortedArrayList<>();
-        persons.add(new Person("Egon", 50 ));
-        persons.add(new Person("Ekkart", 74));
-        persons.add(new Person("Anton", 84));
-        persons.add(new Person("Carlos", 70));
-        persons.add(new Person("Ekkart", 70));
-
-        print(persons);
-        System.out.println("--------------------");
-
-        // persons.add(0, new Person("Egon", 100 )); // should throw an exception
-        persons.add(new Person("Egon", 100 ));
-        print(persons);
-        System.out.println("--------------------");
+//        List<Person> persons = new ArrayList<>();
+//
+//        persons.add(new Person("Egon", 50 ));
+//        persons.add(new Person("Ekkart", 74));
+//        persons.add(new Person("Anton", 84));
+//        persons.add(new Person("Carlos", 70));
+//        persons.add(new Person("Ekkart", 70));
+//
+//        print(persons);
+//        System.out.println("--------------------");
+//        persons.sort(comparator);
+//        // BubbleSort.sort(comparator,persons);
+//
+//        print(persons);
+//        System.out.println("--------------------");
+//
+//        persons.add(2, new Person("Xavi", 85));
+//
+//        print(persons);
+//        System.out.println("--------------------");
+//        // persons.sort(comparator);
+//        BubbleSort.sort(comparator, persons);
+//
+//        print(persons);
+//        System.out.println("--------------------");
+//
+//        persons = new SortedArrayList<>();
+//        persons.add(new Person("Egon", 50 ));
+//        persons.add(new Person("Ekkart", 74));
+//        persons.add(new Person("Anton", 84));
+//        persons.add(new Person("Carlos", 70));
+//        persons.add(new Person("Ekkart", 70));
+//
+//        print(persons);
+//        System.out.println("--------------------");
+//
+//        // persons.add(0, new Person("Egon", 100 )); // should throw an exception
+//        persons.add(new Person("Egon", 100 ));
+//        print(persons);
+//        System.out.println("--------------------");
 
         // persons.sort(comparator);  // should throw an exception
     }
