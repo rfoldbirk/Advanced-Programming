@@ -35,6 +35,10 @@ public class Person implements Comparable<Person> {
         return age;
     }
 
+    String getName(){
+        return name;
+    }
+
     @Override
     public int compareTo(@NotNull Person o) {
         if (o == null) {

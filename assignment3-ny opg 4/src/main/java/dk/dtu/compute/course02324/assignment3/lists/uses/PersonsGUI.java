@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -237,20 +238,17 @@ public class PersonsGUI extends GridPane {
      */
     private void update() {
         double sumOfWeights = 0;
-        Map<String, Integer> nameCounter = new HashMap<>();
+        Map.Entry<String, Long> mostFrequentName = persons.stream()
+                .collect(Collectors.groupingBy(Person::getName, Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(Map.entry( "No frequent name", 0L));
         personsPane.getChildren().clear();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
         for (int i=0; i < persons.size(); i++) {
             Person person = persons.get(i);
             sumOfWeights += person.weight;
-
-            if (nameCounter.containsKey(person.name)){
-                int currentCount = nameCounter.get(person.name);
-                nameCounter.put(person.name, currentCount + 1);
-            } else {
-                nameCounter.put(person.name, 1);
-            }
 
             Label personLabel = new Label(i + ": " + person.toString());
             Button deleteButton = new Button("Delete");
@@ -264,17 +262,6 @@ public class PersonsGUI extends GridPane {
             entry.setSpacing(5.0);
             entry.setAlignment(Pos.BASELINE_LEFT);
             personsPane.add(entry, 0, i);
-        }
-
-        // Frequent names
-        int maxCount = 0;
-        String mostFrequentName = "";
-
-        for (Map.Entry<String, Integer> entry: nameCounter.entrySet()){
-            if (entry.getValue() > maxCount){
-                maxCount = entry.getValue();
-                mostFrequentName = entry.getKey();
-            }
         }
 
         // Gennemsnit
