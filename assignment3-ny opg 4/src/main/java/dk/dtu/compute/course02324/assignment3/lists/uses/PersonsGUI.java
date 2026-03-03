@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -237,7 +238,6 @@ public class PersonsGUI extends GridPane {
      */
     private void update() {
         double sumOfWeights = 0;
-        Map<String, Integer> nameCounter = new HashMap<>();
         personsPane.getChildren().clear();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
@@ -245,12 +245,6 @@ public class PersonsGUI extends GridPane {
             Person person = persons.get(i);
             sumOfWeights += person.weight;
 
-            if (nameCounter.containsKey(person.name)){
-                int currentCount = nameCounter.get(person.name);
-                nameCounter.put(person.name, currentCount + 1);
-            } else {
-                nameCounter.put(person.name, 1);
-            }
 
             Label personLabel = new Label(i + ": " + person.toString());
             Button deleteButton = new Button("Delete");
@@ -267,21 +261,12 @@ public class PersonsGUI extends GridPane {
         }
 
         // Frequent names
-        int maxCount = 0;
-        String mostFrequentName = "";
+        Map.Entry<String,Long> mostFrequentName = persons.stream()
+                .collect(Collectors.groupingBy(Person::getName, Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(Map.entry("No frequent name", 0L));
 
-        for (Map.Entry<String, Integer> entry: nameCounter.entrySet()){
-            if (entry.getValue() > maxCount){
-                maxCount = entry.getValue();
-                mostFrequentName = entry.getKey();
-            }
-        }
-
-        // Gennemsnit
-        //double average = 0;
-//        if (!persons.isEmpty()){
-//            average = (double) sumOfWeights/persons.size();
-//        }
 
         // Nye gennemsnit
         double average = persons.stream()
@@ -292,6 +277,7 @@ public class PersonsGUI extends GridPane {
         // min og max af alder
         int min = persons.stream().map(Person :: getAge).reduce(Integer :: min).orElse(0);
         int max = persons.stream().map(Person :: getAge).reduce(Integer :: max).orElse(0);
+
 
         averageWeight.setText("Average weight: " + average);
         freqName.setText("Frequently used name: " + mostFrequentName);

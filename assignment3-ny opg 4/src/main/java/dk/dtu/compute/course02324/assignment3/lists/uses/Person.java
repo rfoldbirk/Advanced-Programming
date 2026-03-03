@@ -20,6 +20,8 @@ public class Person implements Comparable<Person> {
         this.age = age;
     }
 
+    public String getName() { return name; }
+
     public double getWeight(){
         return weight;
     }
