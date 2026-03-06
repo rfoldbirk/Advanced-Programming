@@ -35,6 +35,37 @@ public class TestMiniJava{
         pev = new ProgramExecutorVisitor(ptv);
     }
 
+
+    @Test
+    public void testIntMultAndMinus() {
+        int a = 6 * 7;   // 42
+        int b = 10 - 3;  // 7
+
+        Statement statement = Sequence(
+            Declaration(INT, Var("a"),
+                OperatorExpression(MULT, Literal(6), Literal(7))
+            ),
+            Declaration(INT, Var("b"),
+                OperatorExpression(MINUS2, Literal(10), Literal(3))
+            )
+        );
+
+        ptv.visit(statement);
+        if (!ptv.problems.isEmpty()) {
+            fail("Unexpected type problems: " + ptv.problems);
+        }
+        pev.visit(statement);
+
+        for (Var var : ptv.variables) {
+            if (var.name.equals("a")) {
+                assertEquals(a, pev.values.get(var).intValue(), "6 * 7 should be 42");
+            } else if (var.name.equals("b")) {
+                assertEquals(b, pev.values.get(var).intValue(), "10 - 3 should be 7");
+            }
+        }
+    }
+
+
     @Test
     public void testCorrectProgramWithInts() {
         int i;
