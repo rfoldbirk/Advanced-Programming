@@ -59,9 +59,11 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    // TODO A6a: add a moveCounter attribute to this class;
+    // TODO-DONE A6a: add a moveCounter attribute to this class;
     //     and add the corresponding getter and setter methods for
     //     this move counter at an appropriate place in this class.
+
+    private int moveCounter = 0;
 
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
@@ -214,11 +216,32 @@ public class Board extends Subject {
         // the students, this method gives a string representation of the current
         // status of the game
 
-        // TODO A6a: add the move count to the status message of the board
+        // TODO-DONE A6a: add the move count to the status message of the board
         // TODO A6c: changed the status so that it shows the phase, the current player, and the current register
         //     and you can remove the move count status message message and the corresponding counter again
         // TODO A6e: add something to the status message, when a player has won the game
-        return "Player = " + getCurrentPlayer().getName();
+        return "Player = " + getCurrentPlayer().getName() + ", Move counter = " + moveCounter;
     }
 
+    /**
+    * @return the value of moveCounter
+     */
+    public int getMoveCounter() {
+        return moveCounter;
+    }
+
+    /**
+     * Set the value of moveCounter
+     * @param moveCounter int (new number to store in moveCounter)
+     */
+    public void setMoveCounter(int moveCounter) {
+        this.moveCounter = moveCounter;
+    }
+
+    /**
+     * Increments the value of moveCounter by one
+     */
+    public void incrementMoveCounter() {
+        this.moveCounter ++;
+    }
 }
