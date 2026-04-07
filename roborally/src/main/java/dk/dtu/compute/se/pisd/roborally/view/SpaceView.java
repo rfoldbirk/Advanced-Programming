@@ -22,12 +22,21 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * ...
@@ -85,13 +94,93 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+    /**
+     * @param subject subject.
+     *
+     * Draws conveyerbelts, checkpoints, players and walls on the map
+     *
+     *
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
             this.getChildren().clear();
 
-            // TODO A6b: drawing the walls and the field action(s) on
+            // TODO-DONE A6b: drawing the walls and the field action(s) on
             //     this space could be implemented here.
+
+            // draw walls
+            for (Heading heading : space.getWalls()) {
+                Line wall = new Line();
+
+                int thickness = 3;
+
+                switch (heading) {
+                    case NORTH:
+                        wall.setStartX(thickness);
+                        wall.setStartY(0);
+                        wall.setEndX(SPACE_WIDTH);
+                        wall.setEndY(0);
+                        wall.setTranslateY(-SPACE_HEIGHT / 2.0 + thickness/2.0);
+                        break;
+
+                    case SOUTH:
+                        wall.setStartX(thickness);
+                        wall.setStartY(0);
+                        wall.setEndX(SPACE_WIDTH);
+                        wall.setEndY(0);
+                        wall.setTranslateY(SPACE_HEIGHT / 2.0 - thickness/2.0);
+                        break;
+
+                    case WEST:
+                        wall.setStartX(0);
+                        wall.setStartY(thickness);
+                        wall.setEndX(0);
+                        wall.setEndY(SPACE_HEIGHT);
+                        wall.setTranslateX(-SPACE_WIDTH / 2.0 + thickness/2.0);
+                        break;
+
+                    case EAST:
+                        wall.setStartX(0);
+                        wall.setStartY(thickness);
+                        wall.setEndX(0);
+                        wall.setEndY(SPACE_HEIGHT);
+                        wall.setTranslateX(SPACE_WIDTH / 2.0 - thickness/2.0);
+                        break;
+                }
+
+                wall.setStrokeWidth(3);
+                wall.setStroke(Color.RED);
+
+                this.getChildren().add(wall);
+            }
+
+            List<FieldAction> actions = space.getActions();
+
+            for (var action : actions) {
+                if (action instanceof ConveyorBelt) {
+                    Polygon arrow = new Polygon(0.0, 0.0, 15.0, 25.0, 30.0, 0.0 );
+
+                    arrow.setFill(Color.GRAY);
+
+                    Heading heading = ((ConveyorBelt) action).getHeading();
+
+                    arrow.setRotate((90*heading.ordinal())%360);
+                    this.getChildren().add(arrow);
+                }
+
+                if (action instanceof Checkpoint check) {
+                    Circle circle = new Circle(SPACE_HEIGHT/4.0, Color.YELLOW);
+
+                    Text text = new javafx.scene.text.Text("" + check.getNumber());
+                    text.setFill(Color.GREEN);
+                    text.setStyle("-fx-font-weight: bold");
+
+                    this.getChildren().add(circle);
+                    this.getChildren().add(text);
+                }
+            }
+
 
             updatePlayer();
         }

@@ -69,7 +69,14 @@ public class AppController implements Observer {
         dialog.setHeaderText("Select number of players");
         Optional<Integer> result = dialog.showAndWait();
 
-        if (result.isPresent()) {
+        // A6b board choice dialog
+        List<String> boardOptions = BoardFactory.getInstance().getBoardNames();
+        ChoiceDialog<String> boardDialog = new ChoiceDialog<>(boardOptions.getFirst(), boardOptions);
+        boardDialog.setTitle("Board");
+        boardDialog.setHeaderText("Select board");
+        Optional<String> boardChoice = boardDialog.showAndWait();
+
+        if (result.isPresent() && boardChoice.isPresent()) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
                 // give the user the option to save the game or abort this operation!
@@ -78,14 +85,14 @@ public class AppController implements Observer {
                 }
             }
 
-            // TODO A6b: Use a user dialog here (similar to the one above
+            // TODO-DONE A6b: Use a user dialog here (similar to the one above
             //     for player number) which lets the user select one of the
             //     available boards, and then create the chosen board using
             //     the BoardFactory (instead of creating an empty board).
 
             // The code below just creates an empty board with the chosen
             // number of players on it.
-            Board board = new Board(8,8);
+            Board board = BoardFactory.getInstance().createBoard(boardChoice.get());
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {

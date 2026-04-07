@@ -4,6 +4,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
+import java.util.List;
+
 /**
  * A factory for creating boards. The factory itself is implemented as a singleton.
  *
@@ -44,17 +46,25 @@ public class BoardFactory {
      * @return the new board corresponding to that name
      */
     public Board createBoard(String name) {
-        // TODO A6b: Implement this method properly as described in Assignment 6b.
+        // TODO-DONE A6b: Implement this method properly as described in Assignment 6b.
         //     Dependent on the provided name, create a board accordingly and
         //     return it. In case the name is null, some default board should
         //     be returned (defensive programming).
 
-        Board board;
         if (name == null) {
-            board = new Board(8,8, "<none>");
-        } else {
-            board = new Board(8,8, name);
+            return createBoard1(); // default
         }
+
+        switch (name) {
+            case "Board 2":
+                return createBoard2();
+            default:
+                return createBoard1();
+        }
+    }
+
+    private Board createBoard1() {
+        Board board = new Board(8,8, "Board 1");
 
         // add some walls, actions and checkpoints to some spaces
         Space space = board.getSpace(0,0);
@@ -86,14 +96,46 @@ public class BoardFactory {
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
+        // Checkpoitns
+        board.getSpace(2,2).getActions().add(new Checkpoint(1));
+        board.getSpace(4,4).getActions().add(new Checkpoint(2));
+
         return board;
     }
 
-    // TODO A6b: add a method that returns a list (of type List<String>)
+
+    private Board createBoard2() {
+        Board board = new Board(8, 8, "Board 2");
+
+        Space space = board.getSpace(3,3);
+        space.getWalls().add(Heading.NORTH);
+        space.getWalls().add(Heading.EAST);
+
+        ConveyorBelt action = new ConveyorBelt();
+        action.setHeading(Heading.SOUTH);
+        space.getActions().add(action);
+
+        space = board.getSpace(3,4);
+        action = new ConveyorBelt();
+        action.setHeading(Heading.SOUTH);
+        space.getActions().add(action);
+
+        // Checkpoints
+        board.getSpace(0,7).getActions().add(new Checkpoint(1));
+        board.getSpace(7,0).getActions().add(new Checkpoint(2));
+
+        return board;
+    }
+
+
+    // TODO-DONE A6b: add a method that returns a list (of type List<String>)
     //     of all available board names. The corresponding method
     //     createBoard(String name) must return a board for any of the
     //     names in this list. Make sure that the new method that you create
     //     here has a proper JavaDoc documentation.
     //
+    public List<String> getBoardNames() {
+        return List.of("Board 1", "Board 2");
+    }
 
 }
