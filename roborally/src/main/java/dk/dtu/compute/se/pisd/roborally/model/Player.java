@@ -42,6 +42,8 @@ public class Player extends Subject {
     private String name;
     private String color;
 
+    private int reachedCheckpoints;
+
     private Space space;
     private Heading heading = SOUTH;
 
@@ -64,6 +66,15 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
         }
+    }
+
+    public boolean reachedCheckpoint(int value) {
+        if (reachedCheckpoints == value-1) {
+            reachedCheckpoints += 1;
+            return true;
+        }
+
+        return false;
     }
 
     public String getName() {

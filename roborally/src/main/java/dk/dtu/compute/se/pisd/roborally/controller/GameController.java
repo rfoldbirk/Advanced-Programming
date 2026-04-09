@@ -166,6 +166,13 @@ public class GameController {
                 if (card != null) {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
+
+                    // execute action if it exists
+                    var space = currentPlayer.getSpace();
+                    var actions = space.getActions();
+                    for (var action : actions) {
+                        action.doAction(this, space);
+                    }
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
@@ -230,7 +237,7 @@ public class GameController {
      * @param heading
      * @return true if move was possible!
      */
-    private boolean moveDir(@NotNull Player player, @NotNull Heading heading) {
+    public boolean moveDir(@NotNull Player player, @NotNull Heading heading) {
         var n = board.getNeighbour(player.getSpace(), heading);
         if (n == null) return false;
 
@@ -248,6 +255,7 @@ public class GameController {
         player.setSpace(n);
 
         // hvis vi lander på en plads, hvor der findes et conveyorbelt, så skal vi fortsætte i den retning, hvis muligt.
+        /* TODO-DELETE:
         var actions = n.getActions();
         for (var action : actions) {
             if (!(action instanceof ConveyorBelt)) continue;
@@ -255,6 +263,7 @@ public class GameController {
             var newHeading = ((ConveyorBelt) action).getHeading();
             moveDir(player, newHeading);
         }
+        */
 
         return true;
     }

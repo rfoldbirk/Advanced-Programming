@@ -52,8 +52,24 @@ public class ConveyorBelt extends FieldAction {
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO A6d: needs to be implemented
+        // TODO-DONE A6d: needs to be implemented
         // ...
+
+        if (space.getPlayer() == null) return false;
+
+        var player = space.getPlayer();
+        gameController.moveDir(player, heading);
+
+        // kig på næste felt og se om det også er et conveyorbelt!
+        var n = gameController.board.getNeighbour(space, heading);
+        if (n == null) return false;
+
+        var actions = n.getActions();
+        for (var action : actions) {
+            if (action instanceof ConveyorBelt) {
+                return doAction(gameController, n);
+            }
+        }
 
         return false;
     }

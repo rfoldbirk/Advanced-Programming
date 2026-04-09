@@ -232,7 +232,7 @@ public class Board extends Subject {
 
         return newSpace;
     }
-    
+
 
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for
