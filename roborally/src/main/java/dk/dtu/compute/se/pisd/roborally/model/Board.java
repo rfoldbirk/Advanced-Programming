@@ -248,7 +248,8 @@ public class Board extends Subject {
             return current.getName() + " has won this game";
         }
 
-        return "Phase = " + getPhase() + ", Player = " + getCurrentPlayer().getName() + ", Register = " + getStep()+1;
+        int stepCount = getStep() + 1;
+        return "Phase = " + getPhase() + ", Player = " + getCurrentPlayer().getName() + ", Register = " + stepCount;
     }
 
     /**
