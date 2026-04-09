@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -48,6 +49,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
     // 6d Checkpoints reached
     private Label cpLabel;
+
+    // 6e Options
+    private Button choiceA;
+    private Button choiceB;
 
     private Label programLabel;
     private GridPane programPane;
@@ -97,6 +102,8 @@ public class PlayerView extends Tab implements ViewObserver {
 
         // TODO-DONE A6c: the following buttons should be associated with the proper methods
         //          in the game controller
+
+        var phase = gameController.board.getPhase();
 
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
@@ -202,6 +209,12 @@ public class PlayerView extends Tab implements ViewObserver {
                         stepButton.setDisable(false);
                         break;
 
+                    case PLAYER_INTERACTION:
+                        finishButton.setDisable(false);
+                        executeButton.setDisable(false);
+                        stepButton.setDisable(false);
+                        break;
+
                     default:
                         finishButton.setDisable(true);
                         executeButton.setDisable(true);
@@ -219,13 +232,18 @@ public class PlayerView extends Tab implements ViewObserver {
                     //      an interactive command card, and the buttons should represent
                     //      the player's choices of the interactive command card. The
                     //      following is just a mockup showing two options
-                    Button optionButton = new Button("Option1");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
+
+                    Command cmd = gameController.getChoice();
+
+                    var optionA = cmd.getOptions().getFirst();
+                    Button optionButton = new Button(optionA.displayName);
+                    optionButton.setOnAction( e -> gameController.choose(optionA));
                     optionButton.setDisable(false);
                     playerInteractionPanel.getChildren().add(optionButton);
 
-                    optionButton = new Button("Option 2");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
+                    var optionB = cmd.getOptions().getLast();
+                    optionButton = new Button(optionB.displayName);
+                    optionButton.setOnAction( e -> gameController.choose(optionB));
                     optionButton.setDisable(false);
                     playerInteractionPanel.getChildren().add(optionButton);
                 }

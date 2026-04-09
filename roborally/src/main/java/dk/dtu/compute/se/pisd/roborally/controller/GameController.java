@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * ...
  *
@@ -34,10 +36,21 @@ public class GameController {
 
     final public Board board;
 
+    private Command choice;
+
     public GameController(@NotNull Board board) {
         this.board = board;
     }
 
+    public Command getChoice() {
+        return choice;
+    }
+
+    public void choose(@NotNull Command command) {
+        executeCommand(board.getCurrentPlayer(), command);
+        board.setPhase(Phase.ACTIVATION);
+        continuePrograms();
+    }
     /**
      * This is just some dummy controller operation to make a simple move to see something
      * happening on the board. This method should eventually be deleted!
@@ -159,14 +172,25 @@ public class GameController {
     //     at the right point)
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
+        Phase phase = board.getPhase();
+
+        if (phase == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
-                    executeCommand(currentPlayer, command);
 
+                    if (command.isInteractive() && choice == null) {
+                        choice = command;
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
+                    }
+
+                    if (choice == null)
+                        executeCommand(currentPlayer, command);
+
+                    choice = null;
                     // execute action if it exists
                     var space = currentPlayer.getSpace();
                     var actions = space.getActions();
@@ -259,18 +283,6 @@ public class GameController {
 
 
         player.setSpace(n);
-
-        // hvis vi lander på en plads, hvor der findes et conveyorbelt, så skal vi fortsætte i den retning, hvis muligt.
-        /* TODO-DELETE:
-        var actions = n.getActions();
-        for (var action : actions) {
-            if (!(action instanceof ConveyorBelt)) continue;
-
-            var newHeading = ((ConveyorBelt) action).getHeading();
-            moveDir(player, newHeading);
-        }
-        */
-
         return true;
     }
 
@@ -315,14 +327,4 @@ public class GameController {
         var newHeading = originalHeading.reverse();
         moveDir(player, newHeading);
     }
-
-    /**
-     * A method called when no corresponding controller operation is implemented yet.
-     * This should eventually be removed.
-     */
-    public void notImplemented() {
-        // XXX just for now to indicate that the actual method is not yet implemented
-        assert false;
-    }
-
 }

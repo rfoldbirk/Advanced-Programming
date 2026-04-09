@@ -21,6 +21,9 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * ...
  *
@@ -28,5 +31,19 @@ package dk.dtu.compute.se.pisd.roborally.model;
  *
  */
 public enum Phase {
-    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION, FINISHED
+    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION, FINISHED;
+
+    private Command choice;
+
+    public boolean hasChoice() {
+        return choice != null;
+    }
+
+    public Command getChoice() {
+        return choice;
+    }
+
+    public void setChoice(Command choice) {
+        this.choice = choice;
+    }
 }
