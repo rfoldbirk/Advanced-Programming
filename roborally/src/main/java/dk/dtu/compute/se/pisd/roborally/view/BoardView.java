@@ -27,7 +27,9 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.PopupControl;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -86,6 +88,16 @@ public class BoardView extends VBox implements ViewObserver {
         if (subject == board) {
             Phase phase = board.getPhase();
             statusLabel.setText(board.getStatusMessage());
+
+            if (phase != Phase.FINISHED) return;
+
+            // show to popup
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game has been won");
+            alert.setHeaderText(null);
+            alert.setContentText(board.getCurrentPlayer().getName() + " wins!");
+
+            alert.showAndWait();
         }
     }
 

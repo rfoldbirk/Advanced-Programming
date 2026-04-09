@@ -97,8 +97,8 @@ public class BoardFactory {
         space.getActions().add(action);
 
         // Checkpoitns
-        board.getSpace(2,2).getActions().add(new Checkpoint(1));
-        board.getSpace(4,4).getActions().add(new Checkpoint(2));
+        board.getSpace(2,2).getActions().add(new Checkpoint(1, false));
+        board.getSpace(4,4).getActions().add(new Checkpoint(2, true));
 
         return board;
     }
@@ -121,8 +121,8 @@ public class BoardFactory {
         space.getActions().add(action);
 
         // Checkpoints
-        board.getSpace(0,7).getActions().add(new Checkpoint(1));
-        board.getSpace(7,0).getActions().add(new Checkpoint(2));
+        board.getSpace(0,7).getActions().add(new Checkpoint(1, false));
+        board.getSpace(7,0).getActions().add(new Checkpoint(2, true));
 
         return board;
     }

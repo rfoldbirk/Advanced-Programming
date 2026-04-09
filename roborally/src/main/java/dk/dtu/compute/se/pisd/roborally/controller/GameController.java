@@ -152,7 +152,7 @@ public class GameController {
     }
 
     // XXX A6c
-    // TODO A6d: add the execution of the field actions at the right
+    // TODO-DONE A6d: add the execution of the field actions at the right
     //      place in this method
     // TODO A6e: implement the execution af an interactive card to
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
@@ -171,7 +171,13 @@ public class GameController {
                     var space = currentPlayer.getSpace();
                     var actions = space.getActions();
                     for (var action : actions) {
-                        action.doAction(this, space);
+                        var actionResult = action.doAction(this, space);
+
+                        if (action instanceof Checkpoint && actionResult) {
+                            // game has been won!
+                            board.setPhase(Phase.FINISHED);
+                            return;
+                        }
                     }
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
