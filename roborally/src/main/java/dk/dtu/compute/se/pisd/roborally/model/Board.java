@@ -208,8 +208,10 @@ public class Board extends Subject {
                 break;
         }
 
+        var newSpace = getSpace(x, y);
+
         var walls = space.getWalls();
-        var nWalls = getSpace(x, y).getWalls();
+        var nWalls = newSpace.getWalls();
 
         // tjekker at vi ikke kan gå igennem en væk i samme retning
         for (Heading wall : walls) {
@@ -228,13 +230,9 @@ public class Board extends Subject {
             }
         }
 
-        // check if player is on neighbour
-        if (getSpace(x, y).getPlayer() != null) {
-            return null;
-        }
-
-        return getSpace(x, y);
+        return newSpace;
     }
+    
 
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for

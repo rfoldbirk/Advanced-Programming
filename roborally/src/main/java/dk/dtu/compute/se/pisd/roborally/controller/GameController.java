@@ -235,6 +235,16 @@ public class GameController {
         if (n == null) return false;
 
 
+        // if newSpace has a player already, we need to try and push the player first!
+        var nextPlayer = n.getPlayer();
+        if (nextPlayer != null) {
+            var pushResult = pushPlayer(nextPlayer, heading);
+            if (!pushResult) {
+                return false;
+            }
+        }
+
+
         player.setSpace(n);
 
         // hvis vi lander på en plads, hvor der findes et conveyorbelt, så skal vi fortsætte i den retning, hvis muligt.
@@ -247,6 +257,10 @@ public class GameController {
         }
 
         return true;
+    }
+
+    private boolean pushPlayer(@NotNull Player player, @NotNull Heading heading) {
+        return moveDir(player, heading);
     }
 
     // TODO-DONE A6c: implement this method
