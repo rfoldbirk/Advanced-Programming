@@ -68,7 +68,11 @@ public class Player extends Subject {
         }
     }
 
-    public boolean reachedCheckpoint(int value) {
+    public int getCheckpoint() {
+        return reachedCheckpoints;
+    }
+
+    public boolean markCheckpoint(int value) {
         if (reachedCheckpoints == value-1) {
             reachedCheckpoints += 1;
             return true;

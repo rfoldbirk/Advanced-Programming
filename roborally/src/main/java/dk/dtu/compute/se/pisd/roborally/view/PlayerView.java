@@ -46,6 +46,9 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private VBox top;
 
+    // 6d Checkpoints reached
+    private Label cpLabel;
+
     private Label programLabel;
     private GridPane programPane;
     private Label cardsLabel;
@@ -130,8 +133,10 @@ public class PlayerView extends Tab implements ViewObserver {
         top.getChildren().add(cardsLabel);
         top.getChildren().add(cardsPane);
 
-        // TODO A6d: a label for the status of this player could be added here
+        // TODO-DONE A6d: a label for the status of this player could be added here
         //     for showing the number of achieved checkpoints (etc).
+        cpLabel = new Label("Checkpoints reached: 0");
+        top.getChildren().add(cpLabel);
 
         if (player.board != null) {
             player.board.attach(this);
@@ -142,8 +147,12 @@ public class PlayerView extends Tab implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
-            // TODO A6d: update the status label for this player (showing the number
+            // TODO-DONE A6d: update the status label for this player (showing the number
             //     of achieved checkpoints)
+
+            var cp = player.getCheckpoint();
+            cpLabel.setText("Checkpoints reached: " + cp);
+
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
                 if (cardFieldView != null) {

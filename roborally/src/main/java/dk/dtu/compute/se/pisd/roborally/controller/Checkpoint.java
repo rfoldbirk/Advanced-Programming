@@ -21,6 +21,6 @@ public class Checkpoint extends FieldAction {
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         // TODO-DONE A6d: needs to be implemented
         // ...
-        return space.getPlayer().reachedCheckpoint(number);
+        return space.getPlayer().markCheckpoint(number);
     }
 }
