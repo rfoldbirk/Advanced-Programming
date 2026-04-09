@@ -188,7 +188,7 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        // TODO A6c: This implementation needs to be adjusted so that walls on
+        // TODO-DONE A6c: This implementation needs to be adjusted so that walls on
         //          spaces (and maybe other obstacles) are taken into account
         //          (see above JavaDoc comment for this method).
         int x = space.x;
@@ -208,6 +208,31 @@ public class Board extends Subject {
                 break;
         }
 
+        var walls = space.getWalls();
+        var nWalls = getSpace(x, y).getWalls();
+
+        // tjekker at vi ikke kan gå igennem en væk i samme retning
+        for (Heading wall : walls) {
+            if (wall == heading) {
+                return null;
+            }
+        }
+
+        // vender retningen om, til når vi skal tjekke på nabofeltet.
+        var reverseHeading = heading.reverse();
+
+        // tjekker at vi ikke kan krydse ind i en væg, når vi kommer fra den anden retning
+        for (Heading wall : nWalls) {
+            if (wall == reverseHeading) {
+                return null;
+            }
+        }
+
+        // check if player is on neighbour
+        if (getSpace(x, y).getPlayer() != null) {
+            return null;
+        }
+
         return getSpace(x, y);
     }
 
@@ -217,10 +242,10 @@ public class Board extends Subject {
         // status of the game
 
         // TODO-DONE A6a: add the move count to the status message of the board
-        // TODO A6c: changed the status so that it shows the phase, the current player, and the current register
+        // TODO-DONE A6c: changed the status so that it shows the phase, the current player, and the current register
         //     and you can remove the move count status message message and the corresponding counter again
         // TODO A6e: add something to the status message, when a player has won the game
-        return "Player = " + getCurrentPlayer().getName() + ", Move counter = " + moveCounter;
+        return "Phase = " + getPhase() + ", Player = " + getCurrentPlayer().getName() + ", Register = " + getStep()+1;
     }
 
     /**

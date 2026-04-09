@@ -210,17 +210,48 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
-                // TODO A6c: add the cases for the new commands BACK and UTURN to
+                // TODO-DONE A6c: add the cases for the new commands BACK and UTURN to
                 //     this case statement.
+                case BACK:
+                    this.moveBack(player);
+                    break;
+                case U_TURN:
+                    this.uTurn(player);
+                    break;
                 default:
                     // DO NOTHING (for now)//
             }
         }
     }
 
-    // TODO A6c: implement this method
-    public void moveForward(@NotNull Player player) {
 
+    /**
+     * @param player
+     * @param heading
+     * @return true if move was possible!
+     */
+    private boolean moveDir(@NotNull Player player, @NotNull Heading heading) {
+        var n = board.getNeighbour(player.getSpace(), heading);
+        if (n == null) return false;
+
+
+        player.setSpace(n);
+
+        // hvis vi lander på en plads, hvor der findes et conveyorbelt, så skal vi fortsætte i den retning, hvis muligt.
+        var actions = n.getActions();
+        for (var action : actions) {
+            if (!(action instanceof ConveyorBelt)) continue;
+
+            var newHeading = ((ConveyorBelt) action).getHeading();
+            moveDir(player, newHeading);
+        }
+
+        return true;
+    }
+
+    // TODO-DONE A6c: implement this method
+    public void moveForward(@NotNull Player player) {
+        moveDir(player, player.getHeading());
     }
 
     // TODO A6c: implement this method
@@ -228,17 +259,33 @@ public class GameController {
 
     }
 
-    // TODO A6c: implement this method
+    // TODO-DONE A6c: implement this method
     public void turnRight(@NotNull Player player) {
-
+        var newDir = player.getHeading().next();
+        moveDir(player, newDir);
+        player.setHeading(newDir);
     }
 
-    // TODO A6c: implement this method
+    // TODO-DONE A6c: implement this method
     public void turnLeft(@NotNull Player player) {
+        var newDir = player.getHeading().prev();
+        moveDir(player, newDir);
+        player.setHeading(newDir);
+    }
+
+    // TODO-DONE A6c: Add two methods for the new commands BACK and UTURN here.
+    public void uTurn(@NotNull Player player) {
+        var newHeading = player.getHeading().reverse();
+        moveDir(player, newHeading);
+        player.setHeading(newHeading);
 
     }
 
-    // TODO A6c: Add two methods for the new commands BACK and UTURN here.
+    public void moveBack(@NotNull Player player) {
+        var originalHeading = player.getHeading();
+        var newHeading = originalHeading.reverse();
+        moveDir(player, newHeading);
+    }
 
     /**
      * A method called when no corresponding controller operation is implemented yet.
