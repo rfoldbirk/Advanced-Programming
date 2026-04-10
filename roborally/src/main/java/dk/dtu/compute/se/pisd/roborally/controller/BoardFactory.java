@@ -52,19 +52,19 @@ public class BoardFactory {
         //     be returned (defensive programming).
 
         if (name == null) {
-            return createBoard1(); // default
+            return createSimpleBoard(); // default
         }
 
         switch (name) {
-            case "Board 2":
-                return createBoard2();
+            case "advanced":
+                return createAdvancedBoard();
             default:
-                return createBoard1();
+                return createSimpleBoard();
         }
     }
 
-    private Board createBoard1() {
-        Board board = new Board(8,8, "Board 1");
+    private Board createSimpleBoard() {
+        Board board = new Board(8,8, "simple");
 
         // just a lot of map generation :(
         Space space = board.getSpace(0,0);
@@ -104,8 +104,8 @@ public class BoardFactory {
     }
 
 
-    private Board createBoard2() {
-        Board board = new Board(8, 8, "Board 2");
+    private Board createAdvancedBoard() {
+        Board board = new Board(8, 8, "advanced");
 
         // again, but less map generation :)
         Space space = board.getSpace(3,3);
@@ -136,7 +136,7 @@ public class BoardFactory {
     //     here has a proper JavaDoc documentation.
     //
     public List<String> getBoardNames() {
-        return List.of("Board 1", "Board 2");
+        return List.of("simple", "advanced");
     }
 
 }
