@@ -340,7 +340,8 @@ public class GameController {
      */
     // TODO A6c: implement this method
     public void fastForward(@NotNull Player player) {
-
+        moveDir(player, player.getHeading());
+        moveDir(player, player.getHeading());
     }
 
     /**
