@@ -36,6 +36,12 @@ public class GameController {
 
     final public Board board;
 
+
+    /**
+     * This variable can only hold commands that has options!
+     * When Phase is in PLAYER_INTERACTION, this variable is used by the UI, to correctly show the options
+     * When Phase is back to ACTIVATION, if this is truthy, then executeNextStep will ignore the next command.
+     */
     private Command choice;
 
     public GameController(@NotNull Board board) {
@@ -46,6 +52,18 @@ public class GameController {
         return choice;
     }
 
+    /**
+     * @param command the choosen command to execute
+     *
+     * When a player has choosen which action they want to execute, this method is called.
+     * The command is executed and the program is told to continue.
+     *
+     * Please note that this.choice is not set to null, because executeNextStep() depends on it.
+     * If not null it knows to ignore the latest command.
+     *
+     * After the command has been *not* run in executeNextStep this.choice is then set to null.
+     * now the state is truly back to normal.
+     */
     public void choose(@NotNull Command command) {
         executeCommand(board.getCurrentPlayer(), command);
         board.setPhase(Phase.ACTIVATION);
@@ -164,10 +182,14 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
+    /**
+     * Executes the next step in the register on the player
+     * When a command with options is met, the program will halt awaiting input from the player.
+     */
     // XXX A6c
     // TODO-DONE A6d: add the execution of the field actions at the right
     //      place in this method
-    // TODO A6e: implement the execution af an interactive card to
+    // TODO-DONE A6e: implement the execution af an interactive card to
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
     //     at the right point)
     private void executeNextStep() {
@@ -227,6 +249,11 @@ public class GameController {
         }
     }
 
+    /**
+     * @param player
+     * @param command
+     * Calls the appropriate functions depending on the command card
+     */
     // XXX A6c
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
@@ -266,6 +293,7 @@ public class GameController {
      * @param player
      * @param heading
      * @return true if move was possible!
+     * makes sure that players are pushed if possible
      */
     public boolean moveDir(@NotNull Player player, @NotNull Heading heading) {
         var n = board.getNeighbour(player.getSpace(), heading);
@@ -286,42 +314,70 @@ public class GameController {
         return true;
     }
 
+
+    /**
+     * @param player
+     * @param heading
+     * @return true, if player was pushed
+     * will recursively push every other player in path
+     */
     private boolean pushPlayer(@NotNull Player player, @NotNull Heading heading) {
         return moveDir(player, heading);
     }
 
+    /**
+     * @param player
+     * Moves player forward
+     */
     // TODO-DONE A6c: implement this method
     public void moveForward(@NotNull Player player) {
         moveDir(player, player.getHeading());
     }
 
+    /**
+     * @param player
+     *
+     */
     // TODO A6c: implement this method
     public void fastForward(@NotNull Player player) {
 
     }
 
+    /**
+     * @param player
+     * Changes the heading of the player
+     */
     // TODO-DONE A6c: implement this method
     public void turnRight(@NotNull Player player) {
         var newDir = player.getHeading().next();
-        moveDir(player, newDir);
         player.setHeading(newDir);
     }
 
+    /**
+     * @param player
+     * Changes the heading of the player
+     */
     // TODO-DONE A6c: implement this method
     public void turnLeft(@NotNull Player player) {
         var newDir = player.getHeading().prev();
-        moveDir(player, newDir);
         player.setHeading(newDir);
     }
 
+    /**
+     * @param player
+     * Changes the heading of the player, so that it is reversed
+     */
     // TODO-DONE A6c: Add two methods for the new commands BACK and UTURN here.
     public void uTurn(@NotNull Player player) {
         var newHeading = player.getHeading().reverse();
-        moveDir(player, newHeading);
         player.setHeading(newHeading);
 
     }
 
+    /**
+     * @param player
+     * Moves the player back one sqaure
+     */
     public void moveBack(@NotNull Player player) {
         var originalHeading = player.getHeading();
         var newHeading = originalHeading.reverse();

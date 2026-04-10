@@ -228,7 +228,7 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // TODO A6e: these buttons should be shown only when there is
+                    // TODO-DONE A6e: these buttons should be shown only when there is
                     //      an interactive command card, and the buttons should represent
                     //      the player's choices of the interactive command card. The
                     //      following is just a mockup showing two options

@@ -242,7 +242,7 @@ public class Board extends Subject {
         // TODO-DONE A6a: add the move count to the status message of the board
         // TODO-DONE A6c: changed the status so that it shows the phase, the current player, and the current register
         //     and you can remove the move count status message message and the corresponding counter again
-        // TODO A6e: add something to the status message, when a player has won the game
+        // TODO-DONE A6e: add something to the status message, when a player has won the game
 
         if (phase == Phase.FINISHED) {
             return current.getName() + " has won this game";
@@ -253,22 +253,8 @@ public class Board extends Subject {
     }
 
     /**
-    * @return the value of moveCounter
-     */
-    public int getMoveCounter() {
-        return moveCounter;
-    }
-
-    /**
-     * Set the value of moveCounter
-     * @param moveCounter int (new number to store in moveCounter)
-     */
-    public void setMoveCounter(int moveCounter) {
-        this.moveCounter = moveCounter;
-    }
-
-    /**
      * Increments the value of moveCounter by one
+     * DEPRECATED, has no real usage except for moving the player with the mouse.
      */
     public void incrementMoveCounter() {
         this.moveCounter ++;

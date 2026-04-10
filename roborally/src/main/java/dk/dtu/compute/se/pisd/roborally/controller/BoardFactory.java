@@ -66,7 +66,7 @@ public class BoardFactory {
     private Board createBoard1() {
         Board board = new Board(8,8, "Board 1");
 
-        // add some walls, actions and checkpoints to some spaces
+        // just a lot of map generation :(
         Space space = board.getSpace(0,0);
         space.getWalls().add(Heading.SOUTH);
         ConveyorBelt action  = new ConveyorBelt();
@@ -96,9 +96,9 @@ public class BoardFactory {
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
-        // Checkpoitns
+        // checkpoints yay
         board.getSpace(2,2).getActions().add(new Checkpoint(1, false));
-        board.getSpace(4,4).getActions().add(new Checkpoint(2, true));
+        board.getSpace(4,4).getActions().add(new Checkpoint(2, true)); // this is the final
 
         return board;
     }
@@ -107,6 +107,7 @@ public class BoardFactory {
     private Board createBoard2() {
         Board board = new Board(8, 8, "Board 2");
 
+        // again, but less map generation :)
         Space space = board.getSpace(3,3);
         space.getWalls().add(Heading.NORTH);
         space.getWalls().add(Heading.EAST);
@@ -120,7 +121,7 @@ public class BoardFactory {
         action.setHeading(Heading.SOUTH);
         space.getActions().add(action);
 
-        // Checkpoints
+        // checkpoints
         board.getSpace(0,7).getActions().add(new Checkpoint(1, false));
         board.getSpace(7,0).getActions().add(new Checkpoint(2, true));
 

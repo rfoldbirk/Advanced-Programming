@@ -32,18 +32,4 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum Phase {
     INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION, FINISHED;
-
-    private Command choice;
-
-    public boolean hasChoice() {
-        return choice != null;
-    }
-
-    public Command getChoice() {
-        return choice;
-    }
-
-    public void setChoice(Command choice) {
-        this.choice = choice;
-    }
 }

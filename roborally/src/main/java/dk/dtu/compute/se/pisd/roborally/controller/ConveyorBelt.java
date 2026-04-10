@@ -56,7 +56,7 @@ public class ConveyorBelt extends FieldAction {
         if (space.getPlayer() == null) return false;
 
         var player = space.getPlayer();
-        var res = gameController.moveDir(player, heading);
+        gameController.moveDir(player, heading);
 
         // kig på næste felt og se om det også er et conveyorbelt!
         var n = gameController.board.getNeighbour(space, heading);
