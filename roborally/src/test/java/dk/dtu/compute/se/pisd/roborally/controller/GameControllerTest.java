@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +65,7 @@ class GameControllerTest {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
 
-        gameController.moveForward(current);
+        gameController.fastForward(current);
 
         Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(), "Player " + current.getName() + " should beSpace (0,2)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
@@ -147,15 +144,28 @@ class GameControllerTest {
 
     @Test
     void movePlayer() {
-        var player = gameController.board.getCurrentPlayer();
-        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(5, 5));
-        gameController.board.setCurrentPlayer(gameController.board.getPlayer(1));
-        Assertions.assertEquals(player, gameController.board.getSpace(5, 5).getPlayer(), gameController.board.getCurrentPlayer().getName() + " should beSpace (5,5)!");
+        var player1 = gameController.board.getCurrentPlayer();
+        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(2, 5));
+        gameController.board.setCurrentPlayer(gameController.board.getPlayer(0));
 
-        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(5, 6));
-        gameController.board.setCurrentPlayer(gameController.board.getPlayer(1));
-        Assertions.assertEquals(gameController.board.getCurrentPlayer(), gameController.board.getSpace(5, 6).getPlayer(), gameController.board.getCurrentPlayer().getName() + " should beSpace (5,6)!");
+        var newPlayer = gameController.board.getSpace(2, 5).getPlayer();
+        Assertions.assertEquals(player1, newPlayer, newPlayer.getName() + " should be at Space(2,5)!");
 
+        gameController.moveCurrentPlayerToSpace(gameController.board.getSpace(2, 2));
+        gameController.board.setCurrentPlayer(gameController.board.getPlayer(0));
+
+        newPlayer = gameController.board.getSpace(2, 2).getPlayer();
+        Assertions.assertNotEquals(player1, newPlayer, "Player should not have been moved! Already occupied!" + player1.getName() + " - " + newPlayer.getName());
+    }
+
+    @Test
+    void choose() {
+        CommandCard cmdCard = new CommandCard(Command.FORWARD);
+        gameController.choose(cmdCard.command);
+
+        Phase phase = gameController.board.getPhase();
+
+        Assertions.assertEquals(Phase.PROGRAMMING, phase, "Phase: " + phase + " should be set to PROGRAMMING");
     }
 
     // TODO and there should be more tests added for the different assignments eventually
